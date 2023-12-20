@@ -1,3 +1,0 @@
-#!/bin/sh
-
-zypak-wrapper.sh /app/main/apple-music-desktop-client "$@"

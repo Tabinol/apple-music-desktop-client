@@ -1,9 +1,0 @@
-[Desktop Entry]
-Categories=X-Music;X-Player;Audio
-Exec=me.tabinol.apple-music-desktop-client
-GenericName=Apple Music Unofficial Desktop Client
-Icon=me.tabinol.apple-music-desktop-client
-Keywords=calendar;contacts;mail
-Name=Apple Music Desktop Client
-Terminal=false
-Type=Application

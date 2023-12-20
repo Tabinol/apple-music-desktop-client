@@ -7,7 +7,23 @@
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "release": "electron-builder"
+  },
+  "build": {
+    "electronDownload": {
+      "mirror": "https://github.com/castlabs/electron-releases/releases/download/v"
+    },
+    "appId": "me.tabinol.apple-music-desktop-client",
+    "productName": "Apple Music Desktop Client",
+    "icon": "icon.png",
+    "publish": [
+      "github"
+    ],
+    "linux": {
+      "target": "AppImage",
+      "category": "X-Player;X-Music;Audio"
+    }
   },
   "repository": "https://github.com/Tabinol/apple-music-desktop-client.git",
   "author": "Tabinol",
