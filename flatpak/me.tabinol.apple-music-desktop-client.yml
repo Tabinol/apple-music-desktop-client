@@ -1,0 +1,55 @@
+app-id: me.tabinol.apple-music-desktop-client
+runtime: org.freedesktop.Platform
+runtime-version: '23.08'
+sdk: org.freedesktop.Sdk
+base: org.electronjs.Electron2.BaseApp
+base-version: '23.08'
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.node18
+command: me.tabinol.apple-music-desktop-client
+separate-locales: false
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=pulseaudio
+  - --share=network
+  - --device=dri
+build-options:
+  append-path: /usr/lib/sdk/node18/bin
+  env:
+    NPM_CONFIG_LOGLEVEL: info
+modules:
+  - name: apple-music-desktop-client
+    buildsystem: simple
+    build-options:
+      env:
+        XDG_CACHE_HOME: /run/build/apple-music-desktop-client/flatpak-node/cache
+        npm_config_cache: /run/build/apple-music-desktop-client/flatpak-node/npm-cache
+        npm_config_offline: 'true'
+    build-commands:
+      # Install npm dependencies
+      - npm install --offline
+      # Build the app; in this example the `dist` script
+      # in package.json runs electron-builder
+      - |
+        . ../flatpak-node/electron-builder-arch-args.sh
+        npm run dist -- $ELECTRON_BUILDER_ARCH_ARGS  --linux --dir
+      # Bundle app and dependencies
+      - cp -a dist/linux*unpacked /app/main
+      # Install app wrapper
+      - install -D --mode 0755 --target-directory /app/bin/ ../me.tabinol.apple-music-desktop-client
+      - install -D --mode 0644 --target-directory /app/share/applications/ ../me.tabinol.apple-music-desktop-client.desktop
+      - install -D --mode 0644 --target-directory /app/share/icons/hicolor/scalable/apps/ ../me.tabinol.apple-music-desktop-client.png
+    subdir: main
+    sources:
+      - type: dir
+        path: ..
+        dest: main
+      - generated-sources.json
+      # Wrapper to launch the app
+      - type: file
+        path: me.tabinol.apple-music-desktop-client
+      - type: file
+        path: me.tabinol.apple-music-desktop-client.desktop
+      - type: file
+        path: me.tabinol.apple-music-desktop-client.png
