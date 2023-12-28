@@ -2,14 +2,13 @@
   "name": "apple-music-desktop-client",
   "version": "1.0.1",
   "description": "Unofficial desktop client for Apple Music",
-  "main": "main.js",
-  "type": "module",
+  "main": "js/main.js",
   "scripts": {
-    "start": "electron --no-sandbox --no-zygote .",
+    "start": "tsc && electron --no-sandbox --no-zygote .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder",
-    "release": "electron-builder"
+    "pack": "tsc && electron-builder --dir",
+    "dist": "tsc && electron-builder",
+    "release": "tsc && electron-builder"
   },
   "build": {
     "electronDownload": {
@@ -24,7 +23,11 @@
     "linux": {
       "target": "AppImage",
       "category": "X-Player;X-Music;Audio"
-    }
+    },
+    "files": "!src/**",
+    "extraResources": [
+      "./images/**"
+    ]
   },
   "repository": "https://github.com/Tabinol/apple-music-desktop-client.git",
   "author": "Tabinol",
@@ -38,6 +41,7 @@
   },
   "devDependencies": {
     "electron": "github:castlabs/electron-releases#v28.1.0+wvcus",
-    "electron-builder": "^24.9.1"
+    "electron-builder": "^24.9.1",
+    "typescript": "^5.3.3"
   }
 }
