@@ -1,6 +1,9 @@
 # apple-music-desktop-client
 Unofficial desktop client for Apple Music
 
+## Note
+This application is not verified by, affiliated with, or supported by Apple.
+
 # Install
 For now, only AppImage (Linux) package is provided. You can download it here: https://github.com/Tabinol/apple-music-desktop-client/releases
 
