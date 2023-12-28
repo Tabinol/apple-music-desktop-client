@@ -1,6 +1,6 @@
 {
   "name": "apple-music-desktop-client",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Unofficial desktop client for Apple Music",
   "main": "js/main.js",
   "scripts": {
