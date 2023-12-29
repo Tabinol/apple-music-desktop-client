@@ -5,9 +5,15 @@ Unofficial desktop client for Apple Music
 This application is not verified by, affiliated with, or supported by Apple.
 
 # Install
-For now, only AppImage (Linux) package is provided. You can download it here: https://github.com/Tabinol/apple-music-desktop-client/releases
+For Now, only AppImage, Flatpak file and tar.gz are provided. You can download it here: https://github.com/Tabinol/apple-music-desktop-client/releases
 
+## AppImage
 I recommend to use App Image Launcher: https://github.com/TheAssassin/AppImageLauncher
 
-# Insipration
+## Flatpak
+This project is not (yet) in the Flathub repository. Only a _.flatpak_ file is available.
+    
+    flatpak install /path/to/file.flatpak
+
+# Inspiration
 Apple Music project for Snap: https://github.com/cross-platform/apple-music-for-linux

@@ -21,8 +21,28 @@
       "github"
     ],
     "linux": {
-      "target": "AppImage",
+      "target": [
+        "AppImage",
+        "flatpak",
+        "tar.gz"
+      ],
       "category": "X-Player;X-Music;Audio"
+    },
+    "flatpak": {
+      "runtimeVersion": "23.08",
+      "baseVersion": "23.08",
+      "finishArgs": [
+        "--socket=wayland",
+        "--socket=x11",
+        "--share=ipc",
+        "--device=dri",
+        "--socket=pulseaudio",
+        "--filesystem=home",
+        "--share=network",
+        "--talk-name=org.freedesktop.Notifications",
+        "--socket=session-bus",
+        "--socket=system-bus"
+      ]
     },
     "files": "!src/**",
     "extraResources": [
@@ -30,7 +50,7 @@
     ]
   },
   "repository": "https://github.com/Tabinol/apple-music-desktop-client.git",
-  "author": "Tabinol",
+  "author": "Tabinol <tabinol@tabinol.me> (https://www.tabinol.me)",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/Tabinol/apple-music-desktop-client/issues"
