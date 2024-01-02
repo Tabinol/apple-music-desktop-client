@@ -4,6 +4,7 @@
   "description": "Unofficial desktop client for Apple Music",
   "main": "js/main.js",
   "scripts": {
+    "build": "tsc",
     "start": "tsc && electron --no-sandbox --no-zygote .",
     "test": "tsc && jest",
     "pack": "tsc && electron-builder --dir",
@@ -49,10 +50,11 @@
       "!.circleci/**",
       "!.vscode/**",
       "!.nvmrc",
-      "!src/**",
       "!tests/**",
-      "!babel.config.js",
-      "!js/**/*.map"
+      "!app/**/*.js.map",
+      "!app/**/*.ts",
+      "!babel.config.json",
+      "!jest.config.json"
     ],
     "extraResources": [
       "./images/**"

@@ -15,7 +15,7 @@ export default class TrayMenu {
     }
 
     create() {
-        const iconPath = app.isPackaged ? path.join(process.resourcesPath, ICON_PATH) : ICON_PATH;
+        const iconPath = this.getIconPath();
         this.tray = new Tray(iconPath);
 
         const contextMenu = Menu.buildFromTemplate([
@@ -29,5 +29,9 @@ export default class TrayMenu {
 
         this.tray.setToolTip(TOOL_TIP);
         this.tray.setContextMenu(contextMenu);
+    }
+
+    getIconPath(): string {
+        return app.isPackaged ? path.join(process.resourcesPath, ICON_PATH) : ICON_PATH;
     }
 }
