@@ -132,3 +132,9 @@ dist
 # Compiled JavaScript
 /app/**/*.js
 /app/**/*.js.map
+
+# flatpak
+/flatpak/build/
+/flatpak/repo/
+/flatpak/.flatpak-builder
+/flatpak/generated-sources.json
