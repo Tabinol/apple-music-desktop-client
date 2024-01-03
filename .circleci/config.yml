@@ -99,11 +99,8 @@ jobs:
       - run:
           name: Install build tools for Node
           command: |
-            git clone -n --depth=1 --filter=tree:0 https://github.com/flatpak/flatpak-builder-tools
-            cd flatpak-builder-tools
-            git sparse-checkout set --no-cone node
-            git checkout
-            cd node
+            git clone https://github.com/flatpak/flatpak-builder-tools
+            cd flatpak-builder-tools/node
             pipx install .
       - run:
           name: Generate Flatpak Artifacts
