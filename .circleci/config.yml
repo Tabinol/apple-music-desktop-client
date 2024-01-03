@@ -1,10 +1,14 @@
 version: 2.1
 
-jobs:
-  build:
-    working_directory: ~/repo
+executors:
+  node:
     docker:
       - image: cimg/node:18.19.0
+    working_directory: ~/repo
+
+jobs:
+  build:
+    executor: node
     steps:
       - checkout
       - restore_cache:
@@ -24,14 +28,20 @@ jobs:
       - run:
           name: Generate Builds
           command: yarn build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - node_modules
 
   test:
-    working_directory: ~/repo
-    docker:
-      - image: cimg/node:18.19.0
+    executor: node
     steps:
+      - checkout
       - attach_workspace:
           at: .
+      - run:
+          name: Generate Builds
+          command: yarn build
       - run:
           name: Generate Tests
           command: npx jest --ci --runInBand --reporters=default --reporters=jest-junit
@@ -41,9 +51,7 @@ jobs:
       - store_test_results:
           path: ./reports/
 #  dist:
-#    working_directory: ~/repo
-#    docker:
-#      - image: cimg/node:18.19.0
+#    executor: node
 #    steps:
 #      - run:
 #          name: Generate Artifacts
