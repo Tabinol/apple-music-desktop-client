@@ -9,7 +9,7 @@
     "test": "tsc && jest",
     "pack": "tsc && electron-builder --dir",
     "dist": "tsc && electron-builder --publish never",
-    "flatpak-build": "./flatpak/flatpak-build.sh",
+    "flatpak-install": "./flatpak/flatpak-build.sh",
     "flatpak-start": "flatpak run me.tabinol.apple-music-desktop-client",
     "flatpak-dist": "./flatpak/flatpak-dist.sh"
   },

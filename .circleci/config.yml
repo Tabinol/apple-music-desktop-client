@@ -7,7 +7,7 @@ executors:
     working_directory: ~/repo
   python:
     docker:
-      - image: cimg/python:3.12.1-node
+      - image: cimg/python:3.12.1
     working_directory: ~/repo
 
 jobs:
@@ -86,7 +86,6 @@ jobs:
             sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
             sudo flatpak install -y flathub org.electronjs.Electron2.BaseApp//23.08
             sudo flatpak install -y flathub org.freedesktop.Sdk.Extension.node18//23.08
-            sudo flatpak install -y flathub org.electronjs.Electron2.BaseApp//23.08
       - run:
           name: Install build tools for Node
           command: |
@@ -94,6 +93,8 @@ jobs:
             cd flatpak-builder-tools
             git sparse-checkout set --no-cone node
             git checkout
+            cd node
+            pipx install .
       - run:
           name: Generate Flatpak Artifacts
           command: |
