@@ -91,6 +91,7 @@ jobs:
       - run:
           name: Install flatpak dependencies
           command: |
+            sudo cat /proc/sys/user/max_user_namespaces
             sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
             sudo flatpak install -y flathub org.electronjs.Electron2.BaseApp//23.08
             sudo flatpak install -y flathub org.freedesktop.Sdk//23.08
