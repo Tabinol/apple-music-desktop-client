@@ -5,10 +5,10 @@ executors:
     docker:
       - image: cimg/node:18.19.0
     working_directory: ~/repo
-  python:
-    docker:
-      - image: cimg/python:3.12.1
-    working_directory: ~/repo
+#  python:
+#    docker:
+#      - image: cimg/python:3.12.1
+#    working_directory: ~/repo
 
 jobs:
   build:
@@ -49,71 +49,73 @@ jobs:
             JEST_JUNIT_ADD_FILE_ATTRIBUTE: "true"
       - store_test_results:
           path: ./reports/
-  dist:
-    executor: node
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - run:
-          name: Generate Artifacts
-          command: yarn dist
-      - run:
-          name: Copy Artifacts
-          command: |
-            mkdir -p /tmp/artifacts
-            cp dist/*.AppImage dist/*.tar.gz artifacts/
-      - store_artifacts:
-          path: artifacts
-      - persist_to_workspace:
-          root: .
-          paths:
-            - artifacts
-  flatpak-dist:
-    executor: python
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - run:
-          name: Install flatpak flatpak-builder
-          command: |
-            sudo apt-get update -y
-            sudo apt-get install -y flatpak-builder
-      - run:
-          name: Install flatpak dependencies
-          command: |
-            echo 127889 | sudo tee /proc/sys/user/max_user_namespaces
-            sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-            sudo flatpak install -y flathub org.electronjs.Electron2.BaseApp//23.08
-            sudo flatpak install -y flathub org.freedesktop.Sdk//23.08
-            sudo flatpak install -y flathub org.freedesktop.Sdk.Extension.node18//23.08
-      - run:
-          name: Install build tools for Node
-          command: |
-            git clone -n --depth=1 --filter=tree:0 https://github.com/flatpak/flatpak-builder-tools
-            cd flatpak-builder-tools
-            git sparse-checkout set --no-cone node
-            git checkout
-            cd node
-            pipx install .
-      - run:
-          name: Generate Flatpak Artifacts
-          command: |
-            cd flatpak
-            ./flatpak-dist.sh
-      - run:
-          name: Copy Artifacts
-          command: |
-            mkdir -p /tmp/artifacts
-            cp dist/*.flatpak /artifacts/
-      - persist_to_workspace:
-          root: .
-          paths:
-            - artifacts
-      - store_artifacts:
-          path: artifacts
 
+#  dist:
+#    executor: node
+#    steps:
+#      - checkout
+#      - attach_workspace:
+#          at: .
+#      - run:
+#          name: Generate Artifacts
+#          command: yarn dist
+#      - run:
+#          name: Copy Artifacts
+#          command: |
+#            mkdir -p /tmp/artifacts
+#            cp dist/*.AppImage dist/*.tar.gz artifacts/
+#      - store_artifacts:
+#          path: artifacts
+#      - persist_to_workspace:
+#          root: .
+#          paths:
+#            - artifacts
+#
+#  flatpak-dist:
+#    executor: python
+#    steps:
+#      - checkout
+#      - attach_workspace:
+#          at: .
+#      - run:
+#          name: Install flatpak flatpak-builder
+#          command: |
+#            sudo apt-get update -y
+#            sudo apt-get install -y flatpak-builder
+#      - run:
+#          name: Install flatpak dependencies
+#          command: |
+#            echo 127889 | sudo tee /proc/sys/user/max_user_namespaces
+#            sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+#            sudo flatpak install -y flathub org.electronjs.Electron2.BaseApp//23.08
+#            sudo flatpak install -y flathub org.freedesktop.Sdk//23.08
+#            sudo flatpak install -y flathub org.freedesktop.Sdk.Extension.node18//23.08
+#      - run:
+#          name: Install build tools for Node
+#          command: |
+#            git clone -n --depth=1 --filter=tree:0 https://github.com/flatpak/flatpak-builder-tools
+#            cd flatpak-builder-tools
+#            git sparse-checkout set --no-cone node
+#            git checkout
+#            cd node
+#            pipx install .
+#      - run:
+#          name: Generate Flatpak Artifacts
+#          command: |
+#            cd flatpak
+#            ./flatpak-dist.sh
+#      - run:
+#          name: Copy Artifacts
+#          command: |
+#            mkdir -p /tmp/artifacts
+#            cp dist/*.flatpak /artifacts/
+#      - persist_to_workspace:
+#          root: .
+#          paths:
+#            - artifacts
+#      - store_artifacts:
+#          path: artifacts
+#
 workflows:
   build-test-dist:
     jobs:
@@ -121,16 +123,16 @@ workflows:
       - test:
           requires:
             - build
-      - dist:
-          context:
-            - tabinol-github
-          requires:
-            - test
-          filters:
-            branches:
-              only: main
-      - flatpak-dist:
-          context:
-            - tabinol-github
-          requires:
-            - test
+#      - dist:
+#          context:
+#            - tabinol-github
+#          requires:
+#            - test
+#          filters:
+#            branches:
+#              only: main
+#      - flatpak-dist:
+#          context:
+#            - tabinol-github
+#          requires:
+#            - test
