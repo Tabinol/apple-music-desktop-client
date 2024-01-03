@@ -9,9 +9,8 @@ jobs:
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: Install Dependencies
-          command: yarn install
+      - node/install-packages:
+          pkg-manager: yarn
       #- run:
       #    name: Install dpkg and fakeroot
       #    command: |
@@ -24,16 +23,32 @@ jobs:
       - run:
           name: Generate Builds
           command: yarn build
+
+  test:
+    working_directory: ~/repo
+    docker:
+      - image: cimg/node:18.19.0
+    steps:
       - run:
           name: Generate Tests
-          command: yarn test
-      - run:
-          name: Generate Artifacts
-          command: yarn dist
-      - run:
-          name: Copy Artifacts
-          command: |
-            mkdir -p /tmp/artifacts
-            cp dist/*.AppImage dist/*.flatpak dist/*.tar.gz /tmp/artifacts/
-      - store_artifacts:
-          path: /tmp/artifacts
+          command: jest --ci --runInBand --reporters=default --reporters=jest-junit
+          environment:
+            JEST_JUNIT_OUTPUT_DIR: ./reports/
+            JEST_JUNIT_ADD_FILE_ATTRIBUTE: "true"
+      - store_test_results:
+          path: ./reports/
+#  dist:
+#    working_directory: ~/repo
+#    docker:
+#      - image: cimg/node:18.19.0
+#    steps:
+#      - run:
+#          name: Generate Artifacts
+#          command: yarn dist
+#      - run:
+#          name: Copy Artifacts
+#          command: |
+#            mkdir -p /tmp/artifacts
+#            cp dist/*.AppImage dist/*.flatpak dist/*.tar.gz /tmp/artifacts/
+#      - store_artifacts:
+#          path: /tmp/artifacts

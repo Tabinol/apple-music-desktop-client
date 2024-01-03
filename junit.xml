@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="3" failures="0" errors="0" time="0.492">
+  <testsuite name="getIconPath" errors="0" failures="0" skipped="0" timestamp="2024-01-03T03:08:12" time="0.373" tests="2">
+    <testcase classname="getIconPath should return the icon path" name="getIconPath should return the icon path" time="0.001">
+    </testcase>
+    <testcase classname="getIconPath should return the icon" name="getIconPath should return the icon" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="getAppUrl" errors="0" failures="0" skipped="0" timestamp="2024-01-03T03:08:13" time="0.093" tests="1">
+    <testcase classname="getAppUrl should return the application url" name="getAppUrl should return the application url" time="0.001">
+    </testcase>
+  </testsuite>
+</testsuites>

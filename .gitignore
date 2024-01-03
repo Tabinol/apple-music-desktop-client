@@ -138,3 +138,6 @@ dist
 /flatpak/repo/
 /flatpak/.flatpak-builder
 /flatpak/generated-sources.json
+
+# jest-junit
+/reports/
