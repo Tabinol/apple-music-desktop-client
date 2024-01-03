@@ -17,9 +17,6 @@
     "electronDist": "node_modules/electron/dist",
     "appId": "me.tabinol.apple-music-desktop-client",
     "icon": "icon.png",
-    "publish": [
-      "github"
-    ],
     "linux": {
       "target": [
         "AppImage",
