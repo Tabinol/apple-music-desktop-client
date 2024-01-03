@@ -30,6 +30,8 @@ jobs:
     docker:
       - image: cimg/node:18.19.0
     steps:
+      - attach_workspace:
+          at: .
       - run:
           name: Generate Tests
           command: npx jest --ci --runInBand --reporters=default --reporters=jest-junit
@@ -53,3 +55,11 @@ jobs:
 #            cp dist/*.AppImage dist/*.flatpak dist/*.tar.gz /tmp/artifacts/
 #      - store_artifacts:
 #          path: /tmp/artifacts
+
+workflows:
+  build-test-dist:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
