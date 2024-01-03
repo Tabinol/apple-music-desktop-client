@@ -5,6 +5,10 @@ executors:
     docker:
       - image: cimg/node:18.19.0
     working_directory: ~/repo
+  python:
+    docker:
+      - image: cimg/python:3.12.1
+    working_directory: ~/repo
 
 jobs:
   build:
@@ -50,19 +54,22 @@ jobs:
             JEST_JUNIT_ADD_FILE_ATTRIBUTE: "true"
       - store_test_results:
           path: ./reports/
-#  dist:
-#    executor: node
-#    steps:
-#      - run:
-#          name: Generate Artifacts
-#          command: yarn dist
-#      - run:
-#          name: Copy Artifacts
-#          command: |
-#            mkdir -p /tmp/artifacts
-#            cp dist/*.AppImage dist/*.flatpak dist/*.tar.gz /tmp/artifacts/
-#      - store_artifacts:
-#          path: /tmp/artifacts
+  dist:
+    executor: node
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Generate Artifacts
+          command: yarn dist
+      - run:
+          name: Copy Artifacts
+          command: |
+            mkdir -p /tmp/artifacts
+            cp dist/*.AppImage dist/*.flatpak dist/*.tar.gz /tmp/artifacts/
+      - store_artifacts:
+          path: /tmp/artifacts
 
 workflows:
   build-test-dist:
@@ -71,3 +78,8 @@ workflows:
       - test:
           requires:
             - build
+      - dist:
+          context:
+            - tabinol-github
+          requires:
+            - test
