@@ -7,7 +7,7 @@ executors:
     working_directory: ~/repo
   python:
     docker:
-      - image: cimg/python:3.12.1
+      - image: cimg/python:3.12.1-node
     working_directory: ~/repo
 
 jobs:
@@ -20,11 +20,6 @@ jobs:
       - run:
           name: Install Dependencies
           command: yarn install
-      #- run:
-      #    name: Install dpkg and fakeroot
-      #    command: |
-      #      sudo apt-get update -y
-      #      sudo apt-get install -y dpkg fakeroot
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
@@ -67,9 +62,52 @@ jobs:
           name: Copy Artifacts
           command: |
             mkdir -p /tmp/artifacts
-            cp dist/*.AppImage dist/*.flatpak dist/*.tar.gz /tmp/artifacts/
+            cp dist/*.AppImage dist/*.tar.gz artifacts/
       - store_artifacts:
-          path: /tmp/artifacts
+          path: artifacts
+      - persist_to_workspace:
+          root: .
+          paths:
+            - artifacts
+  flatpak-dist:
+    executor: python
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install flatpak flatpak-builder
+          command: |
+            sudo apt-get update -y
+            sudo apt-get install -y flatpak-builder
+      - run:
+          name: Install flatpak dependencies
+          command: |
+            flatpak install flathub org.electronjs.Electron2.BaseApp//23.08
+            flatpak install flathub org.freedesktop.Sdk.Extension.node18//23.08
+      - run:
+          name: Install build tools for Node
+          command: |
+            git clone -n --depth=1 --filter=tree:0 https://github.com/flatpak/flatpak-builder-tools
+            cd flatpak-builder-tools
+            git sparse-checkout set --no-cone node
+            git checkout
+      - run:
+          name: Generate Flatpak Artifacts
+          command: |
+            cd flatpak
+            ./flatpak-dist.sh
+      - run:
+          name: Copy Artifacts
+          command: |
+            mkdir -p /tmp/artifacts
+            cp dist/*.flatpak /artifacts/
+      - persist_to_workspace:
+          root: .
+          paths:
+            - artifacts
+      - store_artifacts:
+          path: artifacts
 
 workflows:
   build-test-dist:
@@ -79,6 +117,14 @@ workflows:
           requires:
             - build
       - dist:
+          context:
+            - tabinol-github
+          requires:
+            - test
+          filters:
+            branches:
+              only: main
+      - flatpak-dist:
           context:
             - tabinol-github
           requires:
