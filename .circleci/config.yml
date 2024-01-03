@@ -9,8 +9,9 @@ jobs:
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
-      - node/install-packages:
-          pkg-manager: yarn
+      - run:
+          name: Install Dependencies
+          command: yarn install
       #- run:
       #    name: Install dpkg and fakeroot
       #    command: |
@@ -31,7 +32,7 @@ jobs:
     steps:
       - run:
           name: Generate Tests
-          command: jest --ci --runInBand --reporters=default --reporters=jest-junit
+          command: npx jest --ci --runInBand --reporters=default --reporters=jest-junit
           environment:
             JEST_JUNIT_OUTPUT_DIR: ./reports/
             JEST_JUNIT_ADD_FILE_ATTRIBUTE: "true"
