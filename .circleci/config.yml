@@ -5,16 +5,16 @@ executors:
     docker:
       - image: cimg/node:18.19.0
     working_directory: ~/repo
-  node-local-kubernetes:
+  node-hosted-kubernetes:
     docker:
       - image: cimg/node:18.19.0
     working_directory: ~/repo
-    resource_class: tabinol/local-kubernetes
-  python-local-kubernetes:
+    resource_class: tabinol/hosted-kubernetes
+  python-hosted-kubernetes:
     docker:
       - image: cimg/python:3.12.1
     working_directory: ~/repo
-    resource_class: tabinol/local-kubernetes
+    resource_class: tabinol/hosted-kubernetes
 
 jobs:
   build:
@@ -57,7 +57,7 @@ jobs:
           path: ./reports/
 
   dist:
-    executor: node-local-kubernetes
+    executor: node-hosted-kubernetes
     steps:
       - checkout
       - attach_workspace:
@@ -78,7 +78,7 @@ jobs:
             - artifacts
 
   flatpak-dist:
-    executor: python-local-kubernetes
+    executor: python-hosted-kubernetes
     steps:
       - checkout
       - attach_workspace:
