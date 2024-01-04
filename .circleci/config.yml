@@ -5,16 +5,10 @@ executors:
     docker:
       - image: cimg/node:18.19.0
     working_directory: ~/repo
-  node-hosted-kubernetes:
-    docker:
-      - image: cimg/node:18.19.0
+  debian-node-flatpak:
+    machine: true
     working_directory: ~/repo
-    resource_class: tabinol/hosted-kubernetes
-  python-hosted-kubernetes:
-    docker:
-      - image: cimg/python:3.12.1
-    working_directory: ~/repo
-    resource_class: tabinol/hosted-kubernetes
+    resource_class: tabinol/debian-node-flatpak
 
 jobs:
   build:
@@ -43,7 +37,7 @@ jobs:
           path: ./reports/
 
   dist:
-    executor: node-hosted-kubernetes
+    executor: debian-node-flatpak
     steps:
       - checkout
       - restore_cache:
@@ -60,32 +54,32 @@ jobs:
           path: artifacts
 
   flatpak-dist:
-    executor: python-hosted-kubernetes
+    executor: debian-node-flatpak
     steps:
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: Install flatpak flatpak-builder
-          command: |
-            sudo apt-get update -y
-            sudo apt-get install -y flatpak-builder
-      - run:
-          name: Install flatpak dependencies
-          command: |
-            sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-            sudo flatpak install -y flathub org.electronjs.Electron2.BaseApp//23.08
-            sudo flatpak install -y flathub org.freedesktop.Sdk//23.08
-            sudo flatpak install -y flathub org.freedesktop.Sdk.Extension.node18//23.08
-      - run:
-          name: Install build tools for Node
-          command: |
-            mkdir -p ~/.ssh
-            [ -f ~/.ssh ] && ssh-keygen -R github.com
-            curl -L https://api.github.com/meta | jq -r '.ssh_keys | .[]' | sed -e 's/^/github.com /' >> ~/.ssh/known_hosts
-            git clone https://github.com/flatpak/flatpak-builder-tools
-            cd flatpak-builder-tools/node
-            pipx install .
+      #- run:
+      #    name: Install flatpak flatpak-builder
+      #    command: |
+      #      sudo apt-get update -y
+      #      sudo apt-get install -y flatpak-builder
+      #- run:
+      #    name: Install flatpak dependencies
+      #    command: |
+      #      sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+      #      sudo flatpak install -y flathub org.electronjs.Electron2.BaseApp//23.08
+      #      sudo flatpak install -y flathub org.freedesktop.Sdk//23.08
+      #      sudo flatpak install -y flathub org.freedesktop.Sdk.Extension.node18//23.08
+      #- run:
+      #    name: Install build tools for Node
+      #    command: |
+      #      mkdir -p ~/.ssh
+      #      [ -f ~/.ssh ] && ssh-keygen -R github.com
+      #      curl -L https://api.github.com/meta | jq -r '.ssh_keys | .[]' | sed -e 's/^/github.com /' >> ~/.ssh/known_hosts
+      #      git clone https://github.com/flatpak/flatpak-builder-tools
+      #      cd flatpak-builder-tools/node
+      #      pipx install .
       - run:
           name: Generate Flatpak Artifacts
           command: |
