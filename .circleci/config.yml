@@ -91,10 +91,10 @@ jobs:
       - run:
           name: Install flatpak dependencies
           command: |
-            flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-            flatpak install --user -y flathub org.electronjs.Electron2.BaseApp//23.08
-            flatpak install --user -y flathub org.freedesktop.Sdk//23.08
-            flatpak install --user -y flathub org.freedesktop.Sdk.Extension.node18//23.08
+            sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+            sudo flatpak install -y flathub org.electronjs.Electron2.BaseApp//23.08
+            sudo flatpak install -y flathub org.freedesktop.Sdk//23.08
+            sudo flatpak install -y flathub org.freedesktop.Sdk.Extension.node18//23.08
       - run:
           name: Install build tools for Node
           command: |
