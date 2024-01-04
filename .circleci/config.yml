@@ -33,20 +33,6 @@ jobs:
       - run:
           name: Generate Builds
           command: yarn build
-      - persist_to_workspace:
-          root: .
-          paths:
-            - node_modules
-
-  test:
-    executor: node
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - run:
-          name: Generate Builds
-          command: yarn build
       - run:
           name: Generate Tests
           command: npx jest --ci --runInBand --reporters=default --reporters=jest-junit
@@ -60,8 +46,8 @@ jobs:
     executor: node-hosted-kubernetes
     steps:
       - checkout
-      - attach_workspace:
-          at: .
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: Generate Artifacts
           command: yarn dist
@@ -72,17 +58,13 @@ jobs:
             cp dist/*.AppImage dist/*.tar.gz artifacts/
       - store_artifacts:
           path: artifacts
-      - persist_to_workspace:
-          root: .
-          paths:
-            - artifacts
 
   flatpak-dist:
     executor: python-hosted-kubernetes
     steps:
       - checkout
-      - attach_workspace:
-          at: .
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: Install flatpak flatpak-builder
           command: |
@@ -114,10 +96,6 @@ jobs:
           command: |
             mkdir -p artifacts
             cp dist/*.flatpak artifacts/
-      - persist_to_workspace:
-          root: .
-          paths:
-            - artifacts
       - store_artifacts:
           path: artifacts
 
@@ -125,14 +103,11 @@ workflows:
   build-test-dist:
     jobs:
       - build
-      - test:
-          requires:
-            - build
       - dist:
           context:
             - tabinol-github
           requires:
-            - test
+            - build
           #filters:
           #  branches:
           #    only: main
@@ -140,4 +115,7 @@ workflows:
           context:
             - tabinol-github
           requires:
-            - test
+            - build
+          #filters:
+          #  branches:
+          #    only: main
