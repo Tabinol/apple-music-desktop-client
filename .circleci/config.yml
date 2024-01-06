@@ -27,7 +27,6 @@ jobs:
             JEST_JUNIT_ADD_FILE_ATTRIBUTE: "true"
       - store_test_results:
           path: ./reports/
-
   dist:
     executor: debian-node-flatpak
     steps:
