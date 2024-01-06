@@ -34,11 +34,7 @@ jobs:
       - checkout
       - run:
           name: Use node version
-          command: |
-            id
-            uname -a
-            pwd
-            nvm use
+          command: nvm use
       - run:
           name: Install Dependencies
           command: yarn install
