@@ -1,6 +1,9 @@
 # apple-music-desktop-client
-Unofficial desktop client for Apple Music
+Unofficial desktop client for Apple Music for Linux
 
+![screenshot](md/apple-music-desktop-client.png)
+
+[![<ORG_NAME>](https://circleci.com/gh/Tabinol/apple-music-desktop-client.svg?style=svg)](https://app.circleci.com/pipelines/github/Tabinol/apple-music-desktop-client?branch=main)
 ## Note
 This application is not verified by, affiliated with, or supported by Apple.
 

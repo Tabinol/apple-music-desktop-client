@@ -37,6 +37,7 @@
       "!app/**/*.ts",
       "!flatpak/**",
       "!reports/**",
+      "!md/**",
       "!babel.config.json",
       "!jest.config.json"
     ],
