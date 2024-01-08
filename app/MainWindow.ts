@@ -1,11 +1,8 @@
 import { app, BrowserWindow, Menu, shell } from "electron";
-import Store from "electron-store";
+import Store from 'electron-store';
 
-const urlPrefix = "https://music.apple.com/";
-const locale = app.getLocaleCountryCode().toLowerCase();
-const urlSuffix = "/browse?l=";
-const language = app.getPreferredSystemLanguages()[0];
-const appUrl = urlPrefix + locale + urlSuffix + language;
+const URL_PREFIX = 'https://music.apple.com/';
+const URL_SUFFIX = '/browse?l=';
 
 const WIN_BOUNDS_KEY = "winBounds";
 
@@ -51,6 +48,7 @@ export default class MainWindow {
             this.hide();
         });
 
+        const appUrl = this.getAppUrl();
         this.win.loadURL(appUrl);
     }
 
@@ -79,6 +77,13 @@ export default class MainWindow {
         this.isDone = true;
         this.saveBounds();
         app.quit();
+    }
+
+    getAppUrl(): string {
+        const locale = app.getLocaleCountryCode().toLowerCase();
+        const language = app.getPreferredSystemLanguages()[0];
+
+        return URL_PREFIX + locale + URL_SUFFIX + language;
     }
 
     private setBounds() {

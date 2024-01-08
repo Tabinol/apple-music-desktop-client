@@ -130,4 +130,14 @@ dist
 .pnp.*
 
 # Compiled JavaScript
-/js/
+/app/**/*.js
+/app/**/*.js.map
+
+# flatpak
+/flatpak/build/
+/flatpak/repo/
+/flatpak/.flatpak-builder
+/flatpak/generated-sources.json
+
+# jest-junit
+/reports/

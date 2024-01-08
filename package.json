@@ -2,49 +2,45 @@
   "name": "apple-music-desktop-client",
   "version": "1.0.2",
   "description": "Unofficial desktop client for Apple Music",
-  "main": "js/main.js",
+  "main": "app/main.js",
   "scripts": {
+    "build": "tsc",
     "start": "tsc && electron --no-sandbox --no-zygote .",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "tsc && jest",
     "pack": "tsc && electron-builder --dir",
-    "dist": "tsc && electron-builder",
-    "release": "tsc && electron-builder"
+    "dist": "tsc && electron-builder --publish never",
+    "flatpak-install": "./flatpak/flatpak-build.sh",
+    "flatpak-start": "flatpak run me.tabinol.apple-music-desktop-client",
+    "flatpak-dist": "./flatpak/flatpak-dist.sh"
   },
   "build": {
-    "electronDownload": {
-      "mirror": "https://github.com/castlabs/electron-releases/releases/download/v"
-    },
+    "electronDist": "node_modules/electron/dist",
     "appId": "me.tabinol.apple-music-desktop-client",
-    "productName": "Apple Music Desktop Client",
     "icon": "icon.png",
-    "publish": [
-      "github"
-    ],
     "linux": {
       "target": [
         "AppImage",
-        "flatpak",
         "tar.gz"
       ],
-      "category": "X-Player;X-Music;Audio"
+      "category": "X-Player;X-Music;Audio",
+      "desktop": {
+        "Name": "Apple Music Desktop Client"
+      }
     },
-    "flatpak": {
-      "runtimeVersion": "23.08",
-      "baseVersion": "23.08",
-      "finishArgs": [
-        "--socket=wayland",
-        "--socket=x11",
-        "--share=ipc",
-        "--device=dri",
-        "--socket=pulseaudio",
-        "--filesystem=home",
-        "--share=network",
-        "--talk-name=org.freedesktop.Notifications",
-        "--socket=session-bus",
-        "--socket=system-bus"
-      ]
-    },
-    "files": "!src/**",
+    "files": [
+      "**/*",
+      "!.circleci/**",
+      "!.vscode/**",
+      "!.nvmrc",
+      "!tests/**",
+      "!app/**/*.js.map",
+      "!app/**/*.ts",
+      "!flatpak/**",
+      "!reports/**",
+      "!md/**",
+      "!babel.config.json",
+      "!jest.config.json"
+    ],
     "extraResources": [
       "./images/**"
     ]
@@ -60,8 +56,17 @@
     "electron-store": "^8.1.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.23.6",
+    "@babel/preset-env": "^7.23.6",
+    "@babel/preset-typescript": "^7.23.3",
+    "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.11",
+    "babel-jest": "^29.7.0",
     "electron": "github:castlabs/electron-releases#v28.1.0+wvcus",
     "electron-builder": "^24.9.1",
+    "jest": "^29.7.0",
+    "jest-junit": "^16.0.0",
+    "ts-jest": "^29.1.1",
     "typescript": "^5.3.3"
   }
 }
