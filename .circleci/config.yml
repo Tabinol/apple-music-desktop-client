@@ -48,11 +48,16 @@ jobs:
             cd flatpak
             ./flatpak-dist.sh
       - run:
-          name: Copy Artifacts
+          name: Copy Flatpak Artifacts
           command: |
             mkdir -p artifacts
             cp dist/*.flatpak artifacts/
       - store_artifacts:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              only: main
           path: artifacts
 
 workflows:
@@ -64,6 +69,3 @@ workflows:
             - tabinol-github
           requires:
             - build
-          #filters:
-          #  branches:
-          #    only: main
