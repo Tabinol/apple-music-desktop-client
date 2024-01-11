@@ -39,7 +39,8 @@
       "!reports/**",
       "!md/**",
       "!babel.config.json",
-      "!jest.config.json"
+      "!jest.config.json",
+      "!renovate.json"
     ],
     "extraResources": [
       "./images/**"
